@@ -1,2 +1,6 @@
-https://sci-hub.fun
 http://sci-hub.fun
+https://sci-hub.fun
+http://sci-hub.se
+https://sci-hub.se
+http://sci-hub.tw
+https://sci-hub.tw

@@ -4,6 +4,15 @@
 import requests, wget
 from bs4 import BeautifulSoup
 from PIL import Image
+from termcolor import colored
+
+from update_link import update_link
+
+
+STD_INFO = colored('[INFO]: ', 'green')
+STD_ERROR = colored('[ERROR]: ', 'green')
+STD_WARNING = colored('[WARNING]', 'green')
+# print(STD_INFO, STD_ERROR, STD_WARNING)
 
 class SciHub(object):
     def __init__(self, doi, out):
@@ -17,8 +26,9 @@ class SciHub(object):
             self.scihub_url_list = [l[:-1] for l in f.readlines()]
         print("[INFO]: Successfully read available links of Scihub.")
 
-    def update_links(self, mod='c'):
-        pass
+    def update_link(self, mod='c'):
+        update_link(mod)
+        self.read_available_links()
 
     def find_pdf_in_html(self, html):
         soup = BeautifulSoup(html, 'lxml')
@@ -27,34 +37,38 @@ class SciHub(object):
         print("[INFO]: PDF url -> \n\t%s" %(self.pdf_url))
         print("[INFO]: Article title -> \n\t%s" %(self.title))
 
-    def is_validation_page(self, html):
+    def is_captcha_page(self, html):
         try:
             BeautifulSoup(html, 'lxml').find('img', {'id':'captcha'}).attrs
             return True
         except:
             return False
 
-    def process_validation_code(self, html):
+    def process_captcha_code(self, html):
         soup = BeautifulSoup(html, 'lxml')
-        validation_url_pre = '/'.join(self.pdf_url.split('/')[:3])
-        validation_img_url = validation_url_pre + soup.find('img').attrs['src']
-        with open('./validation_code.jpg', 'wb') as img:
-            img.write(self.sess.get(validation_img_url).content)
-        img = Image.open("./validation_code.jpg")
+        captcha_url_pre = '/'.join(self.pdf_url.split('/')[:3])
+        captcha_img_url = captcha_url_pre + soup.find('img').attrs['src']
+        with open('./captcha_code.jpg', 'wb') as img:
+            img.write(self.sess.get(captcha_img_url).content)
+        img = Image.open("./captcha_code.jpg")
         img.show()
 
-        validation_data = {}
-        validation_data['id'] = soup.find('input', {'type':'hidden', 'name':'id'}).attrs['value']
-        validation_data['answer'] = input('[INPUT]: Type the validation code: ')
-        self.sess.post(self.pdf_url, data=validation_data)
-        print("[INFO]: Post the validation code data.")
+        captcha_data = {}
+        captcha_data['id'] = soup.find('input', {'type':'hidden', 'name':'id'}).attrs['value']
+        captcha_data['answer'] = input('[INPUT]: Type the captcha: ')
+        res = self.sess.post(self.pdf_url, data=captcha_data)
+        return res
 
     def download_pdf(self):
-        res = self.sess.get(self.pdf_url)
-        html = res.content.decode('latin1')
-        if self.is_validation_page(html):
-            print("[INFO]: Validation code is required.")
-            self.process_validation_code(html)
+        while True:
+            res = self.sess.get(self.pdf_url)
+            html = res.content.decode('latin1')
+            if self.is_captcha_page(html):
+                print("[INFO]: Captcha is required.")
+                self.process_captcha_code(html)
+            else:
+                print("[INFO]: Verification success.")
+                break
         print("[INFO]: Downloading...")
         wget.download(self.pdf_url, out='%s/%s.pdf' %(self.out, self.title))
 
@@ -65,7 +79,7 @@ class SciHub(object):
                 print('[WARNING]: All Scihub links are invalid.')
                 update_req = input('[INPUT]: Would you like to update Scihub links? (y/n): ')
                 if update_req == 'y':
-                    self.update_links(mod = 'c')
+                    self.update_link(mod = 'c')
                     self.download()
                 elif update_req == 'n':
                     print("[INFO]: Please manually update Scihub links by $????")
@@ -79,15 +93,15 @@ class SciHub(object):
             content = res.content.decode('utf-8')
             if content in ['\n', '']:
                 print("[ERROR]: Current Scihub link is invalid, changing another link...")
-                url_index += 1
+                scihub_url_index += 1
             else:
                 break
 
-        # try:
-        self.find_pdf_in_html(content)
-        self.download_pdf()
-        # except:
-        #     print("[ERROR]: Failed to access the article.")
+        try:
+            self.find_pdf_in_html(content)
+            self.download_pdf()
+        except:
+            print("[ERROR]: Failed to access the article.")
 
     def _trim(self, s):
         """Drop spaces located in the head or the end of the given string.
@@ -102,10 +116,8 @@ class SciHub(object):
             return s
 
 
-
 if __name__=="__main__":
-    # a = SciHub('10.1039/C1CS15065K', '.')
-    a = SciHub('https://doi.org/10.1016/S0040-4020(01)89282-6', '.')
+    a = SciHub('SGN-CD33A: a novel CD33-targeting antibody–drug conjugate using a pyrrolobenzodiazepine dimer is active in models of drug-resistant AML', '.')
+    # a = SciHub('10.1021/ol9910114', '.')
     a.read_available_links()
-    print(a.scihub_url_list)
     a.download()
