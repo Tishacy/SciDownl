@@ -5,7 +5,9 @@ Download pdfs from Scihub via DOI.
 - Captcha is done.
 
 ## Install
-*PyPI is on the way.*
+```bash
+pip3 install scidownl
+```
 
 ## Usage
 ### Command line
