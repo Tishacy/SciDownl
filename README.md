@@ -2,7 +2,8 @@
 
 Download pdfs from Scihub via DOI.
 - Easy to use.
-- Captcha is done.
+- Easy to deal with captcha.
+- Easy to update Scihub newest domains.
 
 ## Install
 ```bash
