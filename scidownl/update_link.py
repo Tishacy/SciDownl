@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 """Update available Scihub links
 
-method 1: Brute force search
-method 2: Crawling the website https://sci-hub.top, which updates available Scihub links every 30 mins.
+method 1: Crawling the website https://sci-hub.top, which updates available Scihub links every 30 mins.
+method 2: Brute force search
 """
 import string, requests, re
 from bs4 import BeautifulSoup
