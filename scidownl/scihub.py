@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """Download paper to pdf through Scihub.
 """
-import requests, wget
+import requests, wget, os
 from bs4 import BeautifulSoup
 from PIL import Image
 from termcolor import colored
@@ -15,10 +15,15 @@ STD_WARNING = colored('[WARNING] ', 'yellow')
 STD_INPUT = colored('[INPUT] ', 'blue')
 
 class SciHub(object):
-    def __init__(self, doi, out):
+    def __init__(self, doi, out='.'):
         self.doi = doi
         self.out = out
         self.sess = requests.Session()
+        self.check()
+
+    def check(self):
+        if not os.path.isdir(self.out):
+            os.mkdir(self.out)
 
     def read_available_links(self):
         print(STD_INFO + 'Reading available links of Scihub...')
@@ -34,8 +39,8 @@ class SciHub(object):
         soup = BeautifulSoup(html, 'lxml')
         self.pdf_url = soup.find('iframe', {'id': 'pdf'}).attrs['src'].split('#')[0]
         self.title = ' '.join(self._trim(soup.title.text.split('|')[1]).split('/'))
-        print(STD_INFO + "PDF url -> \n\t%s" %(self.pdf_url))
-        print(STD_INFO + "Article title -> \n\t%s" %(self.title))
+        print(STD_INFO + colored('PDF url', attrs=['bold']) + " -> \n\t%s" %(self.pdf_url))
+        print(STD_INFO + colored('Article title', attrs=['bold']) + " -> \n\t%s" %(self.title))
 
     def is_captcha_page(self, html):
         try:
@@ -70,9 +75,11 @@ class SciHub(object):
                 print(STD_INFO + "Verification success.")
                 break
         print(STD_INFO + "Downloading...")
-        wget.download(self.pdf_url, out='%s/%s.pdf' %(self.out, self.title))
+        out_file_path = os.path.join(self.out, self.title + '.pdf')
+        wget.download(self.pdf_url, out = out_file_path)
 
     def download(self):
+        self.read_available_links()
         scihub_url_index = 0
         while True:
             if scihub_url_index >= len(self.scihub_url_list):
@@ -117,7 +124,5 @@ class SciHub(object):
 
 
 if __name__=="__main__":
-    a = SciHub('SGN-CD33A: a novel CD33-targeting antibody–drug conjugate using a pyrrolobenzodiazepine dimer is active in models of drug-resistant AML', '.')
-    # a = SciHub('10.1021/ol9910114', '.')
-    a.read_available_links()
+    a = SciHub('10.1021/ol9910114')
     a.download()

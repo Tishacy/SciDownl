@@ -56,4 +56,4 @@ def update_link(mod='c'):
 
 
 if __name__=="__main__":
-    update_link('b')
+    update_link()
