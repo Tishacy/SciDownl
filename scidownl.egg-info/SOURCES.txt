@@ -1,0 +1,15 @@
+MANIFEST.in
+README.md
+setup.cfg
+setup.py
+scidownl/__init__.py
+scidownl/link.txt
+scidownl/scidownl.py
+scidownl/scihub.py
+scidownl/update_link.py
+scidownl.egg-info/PKG-INFO
+scidownl.egg-info/SOURCES.txt
+scidownl.egg-info/dependency_links.txt
+scidownl.egg-info/entry_points.txt
+scidownl.egg-info/requires.txt
+scidownl.egg-info/top_level.txt

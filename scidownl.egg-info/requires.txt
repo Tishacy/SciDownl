@@ -1,0 +1,6 @@
+termcolor>=1.1.0
+mspider>=0.2.5
+requests>=2.18.4
+wget>=3.2
+Pillow>=6.0.0
+beautifulsoup4>=4.7.1

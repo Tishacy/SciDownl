@@ -40,6 +40,9 @@ $ scidownl -u
 [INFO] http://sci-hub.run
 [INFO] https://sci-hub.se
 [INFO] https://sci-hub.tw
+
+# if show 'PermessionError' when updating, just use sudo.
+$ sudo scidownl -u
 ```
 ### Module
 Download a paper via DOI.
