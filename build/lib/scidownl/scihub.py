@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """Download paper to pdf through Scihub.
 """
-import requests, wget, os
+import requests, os, sys, re
 from bs4 import BeautifulSoup
 from PIL import Image
 from termcolor import colored
@@ -24,6 +24,11 @@ class SciHub(object):
     def check(self):
         if not os.path.isdir(self.out):
             os.mkdir(self.out)
+
+    def check_title(self, title):
+        rstr = r"[\/\\\:\*\?\"\<\>\|]"  # '/ \ : * ? " < > |'
+        new_title = re.sub(rstr, " ", title)
+        return new_title
 
     def read_available_links(self):
         print(STD_INFO + 'Reading available links of Scihub...')
@@ -60,25 +65,32 @@ class SciHub(object):
 
         captcha_data = {}
         captcha_data['id'] = soup.find('input', {'type':'hidden', 'name':'id'}).attrs['value']
-        captcha_data['answer'] = input(STD_INPUT + 'Type the captcha: ')
+        print(STD_INPUT, end='')
+        captcha_data['answer'] = input('Type the captcha: ')
         res = self.sess.post(self.pdf_url, data=captcha_data)
         return res
 
     def download_pdf(self):
+        print(STD_INFO + "Verifying...")
+        res = self.sess.get(self.pdf_url)
         while True:
-            res = self.sess.get(self.pdf_url)
             html = res.content.decode('latin1')
             if self.is_captcha_page(html):
                 print(STD_INFO + "Captcha is required.")
-                self.process_captcha_code(html)
+                res = self.process_captcha_code(html)
             else:
                 print(STD_INFO + "Verification success.")
                 if os.path.isfile('./captcha_code.jpg'):
-                    os.system('rm captcha_code.jpg')
+                    if sys.platform == 'win32':
+                        os.system('del captcha_code.jpg')
+                    else:
+                        os.system('rm captcha_code.jpg')
                 break
-        print(STD_INFO + "Downloading...")
-        out_file_path = os.path.join(self.out, self.title + '.pdf')
-        wget.download(self.pdf_url, out = out_file_path)
+        print('\r' + STD_INFO + "Downloading...", end='')
+        out_file_path = os.path.join(self.out, self.check_title(self.title) + '.pdf')
+        with open(out_file_path, 'wb') as f:
+            f.write(res.content)
+        print('\r' + STD_INFO + "Done.".ljust(50))
 
     def download(self):
         self.read_available_links()
@@ -86,7 +98,8 @@ class SciHub(object):
         while True:
             if scihub_url_index >= len(self.scihub_url_list):
                 print(STD_WARNING + 'All Scihub links are invalid.')
-                update_req = input(STD_INPUT + 'Would you like to update Scihub links? (y/n): ')
+                print(STD_INPUT)
+                update_req = input('Would you like to update Scihub links? (y/n): ')
                 if update_req == 'y':
                     self.update_link(mod = 'c')
                     self.download()
@@ -126,6 +139,6 @@ class SciHub(object):
 
 
 if __name__=="__main__":
-    # a = SciHub('10.1021/ol9910114')
-    a = SciHub('https://doi.org/10.1007/s10579-010-9124-x')
+    a = SciHub('https://doi.org/10.5539/cis.v4n4p72', 'paper')
+    # a = SciHub('https://doi.org/10.1007/s10579-010-9124-x')
     a.download()

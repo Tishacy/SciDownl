@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: scidownl
-Version: 0.1.0
+Version: 0.2.0
 Summary: Download pdfs from Scihub via DOI.
 Home-page: https://github.com/Tishacy/SciDownl
 Author: Tishacy
@@ -10,10 +10,13 @@ Description: # SciDownl
         
         Download pdfs from Scihub via DOI.
         - Easy to use.
-        - Captcha is done.
+        - Easy to deal with captcha.
+        - Easy to update Scihub newest domains.
         
         ## Install
-        *PyPI is on the way.*
+        ```bash
+        pip3 install scidownl
+        ```
         
         ## Usage
         ### Command line
@@ -29,7 +32,7 @@ Description: # SciDownl
                                 directory to download the pdf
           -u, --update          update available Scihub links
         ```
-        #### Example
+        #### Examples
         ```bash
         # download to the current directory
         $ scidownl -D 10.1021/ol9910114
@@ -48,6 +51,9 @@ Description: # SciDownl
         [INFO] http://sci-hub.run
         [INFO] https://sci-hub.se
         [INFO] https://sci-hub.tw
+        
+        # if show 'PermessionError' when updating, just use sudo.
+        $ sudo scidownl -u
         ```
         ### Module
         Download a paper via DOI.

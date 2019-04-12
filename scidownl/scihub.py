@@ -6,7 +6,7 @@ from bs4 import BeautifulSoup
 from PIL import Image
 from termcolor import colored
 
-from update_link import update_link, get_resource_path
+from .update_link import update_link, get_resource_path
 
 
 STD_INFO = colored('[INFO] ', 'green')
