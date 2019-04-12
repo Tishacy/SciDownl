@@ -24,7 +24,7 @@ optional arguments:
                         directory to download the pdf
   -u, --update          update available Scihub links
 ```
-#### Example
+#### Examples
 ```bash
 # download to the current directory
 $ scidownl -D 10.1021/ol9910114
