@@ -67,6 +67,9 @@ update_link(mod='c')
 # Use brute force search method to update available Scihub links.
 update_link(mod='b')
 ```
+## Todo
+- [ ] Captcha recognition.
+- [ ] Automatic sorting of scihub available links.
 
 ## LICENSE
 
