@@ -36,11 +36,8 @@ $ scidownl -D 10.1021/ol9910114 -o paper
 # update available links of Scihub
 $ scidownl -u
 [INFO] Updating links ...
-[INFO] http://sci-hub.fun
-[INFO] https://sci-hub.fun
 [INFO] http://sci-hub.se
 [INFO] http://sci-hub.tw
-[INFO] http://sci-hub.run
 [INFO] https://sci-hub.se
 [INFO] https://sci-hub.tw
 
@@ -67,10 +64,15 @@ update_link(mod='c')
 # Use brute force search method to update available Scihub links.
 update_link(mod='b')
 ```
-## Todo
-Perhaps will never do :)
-- [ ] Captcha recognition.
-- [ ] Automatic sorting of scihub available links.
+## RELEASE
+- v0.1.0: First release.
+- v0.2.0:
+  - Optimized the download speed.
+  - Optimized the captcha processment.
+- v0.2.1:
+  - Applied stream download.
+  - Display of download progress is added.
+  - Fixed bugs of invalid scihub links.
 
 ## LICENSE
 

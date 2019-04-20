@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: scidownl
-Version: 0.2.0
+Version: 0.2.1
 Summary: Download pdfs from Scihub via DOI.
 Home-page: https://github.com/Tishacy/SciDownl
 Author: Tishacy
@@ -44,11 +44,8 @@ Description: # SciDownl
         # update available links of Scihub
         $ scidownl -u
         [INFO] Updating links ...
-        [INFO] http://sci-hub.fun
-        [INFO] https://sci-hub.fun
         [INFO] http://sci-hub.se
         [INFO] http://sci-hub.tw
-        [INFO] http://sci-hub.run
         [INFO] https://sci-hub.se
         [INFO] https://sci-hub.tw
         
@@ -75,6 +72,15 @@ Description: # SciDownl
         # Use brute force search method to update available Scihub links.
         update_link(mod='b')
         ```
+        ## RELEASE
+        - v0.1.0: First release.
+        - v0.2.0:
+          - Optimized the download speed.
+          - Optimized the captcha processment.
+        - v0.2.1:
+          - Applied stream download.
+          - Display of download progress is added.
+          - Fixed bugs of invalid scihub links.
         
         ## LICENSE
         

@@ -28,7 +28,7 @@ def get_url_list():
 
 def basic_func(index, url):
     try:
-        html = requests.get(url, timeout=3).content
+        html = requests.get(url, timeout=6).content
         soup = BeautifulSoup(html, 'lxml')
         title = soup.title.contents[0]
         if title[:7] == "Sci-Hub":
@@ -47,8 +47,9 @@ def update_link(mod='c'):
         pattern = r">(htt[^:]+://sci-hub.[^<]+)<"
         available_links = re.findall(pattern, html)
         for link in available_links:
-            print(STD_INFO + "%s" %(link))
-            LINK_FILE.write(link + '\n')
+            if link[-3:] != "fun":
+                print(STD_INFO + "%s" %(link))
+                LINK_FILE.write(link + '\n')
     elif mod == 'b':
         spider = MSpider(basic_func, get_url_list(), batch_size=18)
         spider.crawl()
