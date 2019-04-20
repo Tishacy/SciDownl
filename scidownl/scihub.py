@@ -6,7 +6,7 @@ from bs4 import BeautifulSoup
 from PIL import Image
 from termcolor import colored
 
-from .update_link import update_link, get_resource_path
+from update_link import update_link, get_resource_path
 
 
 STD_INFO = colored('[INFO] ', 'green')
@@ -47,12 +47,10 @@ class SciHub(object):
         print(STD_INFO + colored('PDF url', attrs=['bold']) + " -> \n\t%s" %(self.pdf_url))
         print(STD_INFO + colored('Article title', attrs=['bold']) + " -> \n\t%s" %(self.title))
 
-    def is_captcha_page(self, html):
-        try:
-            BeautifulSoup(html, 'lxml').find('img', {'id':'captcha'}).attrs
+    def is_captcha_page(self, res):
+        if res.headers['Content-Type'] == "text/html; charset=UTF-8":
             return True
-        except:
-            return False
+        return False
 
     def process_captcha_code(self, html):
         soup = BeautifulSoup(html, 'lxml')
@@ -67,16 +65,16 @@ class SciHub(object):
         captcha_data['id'] = soup.find('input', {'type':'hidden', 'name':'id'}).attrs['value']
         print(STD_INPUT, end='')
         captcha_data['answer'] = input('Type the captcha: ')
-        res = self.sess.post(self.pdf_url, data=captcha_data)
+        res = self.sess.post(self.pdf_url, data=captcha_data, stream=True)
         return res
 
     def download_pdf(self):
         print(STD_INFO + "Verifying...")
-        res = self.sess.get(self.pdf_url)
+        res = self.sess.get(self.pdf_url, stream=True)
         while True:
-            html = res.content.decode('latin1')
-            if self.is_captcha_page(html):
+            if self.is_captcha_page(res):
                 print(STD_INFO + "Captcha is required.")
+                html = res.content.decode('latin1')
                 res = self.process_captcha_code(html)
             else:
                 print(STD_INFO + "Verification success.")
@@ -86,11 +84,18 @@ class SciHub(object):
                     else:
                         os.system('rm captcha_code.jpg')
                 break
-        print('\r' + STD_INFO + "Downloading...", end='')
+
+        tot_size = int(res.headers['Content-Length'])
         out_file_path = os.path.join(self.out, self.check_title(self.title) + '.pdf')
+        downl_size = 0
         with open(out_file_path, 'wb') as f:
-            f.write(res.content)
-        print('\r' + STD_INFO + "Done.".ljust(50))
+            for data in res.iter_content(chunk_size=256, decode_unicode=False):
+                f.write(data)
+                downl_size += len(data)
+                perc = int(downl_size/tot_size*100)
+                perc_disp = colored('[%3d%%] ' %(perc), 'green')
+                print("\r{0}Progress: {1}KB / {2}KB".format(perc_disp, downl_size//1024, tot_size//1024), end='')
+        print('\n' + STD_INFO + "Done.".ljust(50))
 
     def download(self):
         self.read_available_links()
@@ -104,7 +109,7 @@ class SciHub(object):
                     self.update_link(mod = 'c')
                     self.download()
                 elif update_req == 'n':
-                    print(STD_INFO + "Please manually update Scihub links by $????")
+                    print(STD_INFO + "Please manually update Scihub links by $scidownl -u")
                 return
 
             url_pre = self.scihub_url_list[scihub_url_index]
@@ -112,8 +117,8 @@ class SciHub(object):
             paper_url = '%s/%s' %(url_pre, str(self.doi))
 
             res = self.sess.get(paper_url)
-            content = res.content.decode('utf-8')
-            if content in ['\n', ''] or res.status_code in [429]:
+            content = res.text
+            if res.text in ['\n', ''] or res.status_code in [429]:
                 print(STD_ERROR + "Current Scihub link is invalid, changing another link...")
                 scihub_url_index += 1
             else:
@@ -140,5 +145,5 @@ class SciHub(object):
 
 if __name__=="__main__":
     a = SciHub('https://doi.org/10.5539/cis.v4n4p72', 'paper')
-    # a = SciHub('https://doi.org/10.1007/s10579-010-9124-x')
+    # a = SciHub('https://doi.org/10.1101/cshperspect.a023812', 'paper')
     a.download()
