@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """Update available Scihub links
 
-method 1: Crawling the website https://sci-hub.top, which updates available Scihub links every 30 mins.
+method 1: Crawling the website https://lovescihub.wordpress.com/
 method 2: Brute force search
 """
 import string, requests, re, os
@@ -42,17 +42,22 @@ def basic_func(index, url):
 def update_link(mod='c'):
     LINK_FILE = open(get_resource_path('link.txt'), 'w', encoding='utf-8')
     print(STD_INFO + "Updating links ...")
+    PATTERN = r">(htt[^:]+://sci-hub.[^<]+)<"
     if mod == 'c':
-        html = requests.get("https://sci-hub.top/").content.decode()
-        pattern = r">(htt[^:]+://sci-hub.[^<]+)<"
-        available_links = re.findall(pattern, html)
+        # method 1: crawl the website.
+        # src_url = "https://sci-hub.top/"
+        src_url = "https://lovescihub.wordpress.com/"
+        # src_url = "http://tool.yovisun.com/scihub/"
+        html = requests.get(src_url).text
+        available_links = re.findall(PATTERN, html)
         for link in available_links:
             if link[-3:] != "fun":
                 print(STD_INFO + "%s" %(link))
                 LINK_FILE.write(link + '\n')
     elif mod == 'b':
+        # method 2: brute force search
         spider = MSpider(basic_func, get_url_list(), batch_size=18)
-        spider.crawl()
+        spider.crawl()  
     LINK_FILE.close()
 
 def get_resource_path(path):
