@@ -89,7 +89,7 @@ class SciHub(object):
         out_file_path = os.path.join(self.out, self.check_title(self.title) + '.pdf')
         downl_size = 0
         with open(out_file_path, 'wb') as f:
-            for data in res.iter_content(chunk_size=256, decode_unicode=False):
+            for data in res.iter_content(chunk_size=512, decode_unicode=False):
                 f.write(data)
                 downl_size += len(data)
                 perc = int(downl_size/tot_size*100)

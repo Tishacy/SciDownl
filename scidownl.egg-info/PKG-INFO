@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: scidownl
-Version: 0.2.1
+Version: 0.2.2
 Summary: Download pdfs from Scihub via DOI.
 Home-page: https://github.com/Tishacy/SciDownl
 Author: Tishacy
@@ -81,6 +81,8 @@ Description: # SciDownl
           - Applied stream download.
           - Display of download progress is added.
           - Fixed bugs of invalid scihub links.
+        - v0.2.2:
+          - Add new source website.
         
         ## LICENSE
         

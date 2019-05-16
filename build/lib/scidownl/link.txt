@@ -1,4 +1,7 @@
+https://sci-hub.ren
+http://sci-hub.ren
+https://sci-hub.tw
 http://sci-hub.se
 http://sci-hub.tw
-https://sci-hub.tw
+https://sci-hub.run
 https://sci-hub.se

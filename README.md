@@ -23,6 +23,7 @@ optional arguments:
   -o OUTPUT, --output OUTPUT
                         directory to download the pdf
   -u, --update          update available Scihub links
+  -l, --list            list current saved sichub urls.
 ```
 #### Examples
 ```bash
@@ -36,14 +37,28 @@ $ scidownl -D 10.1021/ol9910114 -o paper
 # update available links of Scihub
 $ scidownl -u
 [INFO] Updating links ...
-[INFO] http://sci-hub.se
+[INFO] http://sci-hub.ren
+[INFO] https://sci-hub.ren
 [INFO] http://sci-hub.tw
-[INFO] https://sci-hub.se
+[INFO] https://sci-hub.run
+[INFO] http://sci-hub.se
 [INFO] https://sci-hub.tw
+[INFO] https://sci-hub.se
 
 # if show 'PermessionError' when updating, just use sudo.
 $ sudo scidownl -u
+
+# list available links of Scihub
+$ scidownl -l
+[0] http://sci-hub.ren
+[1] https://sci-hub.ren
+[2] http://sci-hub.tw
+[3] https://sci-hub.run
+[4] http://sci-hub.se
+[5] https://sci-hub.tw
+[6] https://sci-hub.se
 ```
+
 ### Module
 Download a paper via DOI.
 ```python
@@ -73,6 +88,9 @@ update_link(mod='b')
   - Applied stream download.
   - Display of download progress is added.
   - Fixed bugs of invalid scihub links.
+- v0.2.2:
+  - Add new source website.
+  - Add `-l/--list` argument in command line tool.
 
 ## LICENSE
 
