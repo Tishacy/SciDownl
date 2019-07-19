@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: scidownl
-Version: 0.2.2
+Version: 0.2.3
 Summary: Download pdfs from Scihub via DOI.
 Home-page: https://github.com/Tishacy/SciDownl
 Author: Tishacy
@@ -12,6 +12,8 @@ Description: # SciDownl
         - Easy to use.
         - Easy to deal with captcha.
         - Easy to update Scihub newest domains.
+        
+        <img src="./demo.svg">
         
         ## Install
         ```bash
@@ -99,6 +101,9 @@ Description: # SciDownl
         - v0.2.2:
           - Add new source website.
           - Add `-l/--list` argument in command line tool.
+        - v0.2.3:
+            - Fix bugs of empty filename and wrong scidhub urls.
+            - Fix bugs in the brute-force method of updating scihub urls.
         
         ## LICENSE
         

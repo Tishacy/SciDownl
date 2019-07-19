@@ -15,34 +15,11 @@ STD_ERROR = colored('[ERROR] ', 'red')
 STD_WARNING = colored('[WARNING] ', 'yellow')
 STD_INPUT = colored('[INPUT] ', 'blue')
 
-def get_url_list():
-    url_list = []
-    url_pre = 'http://sci-hub.'
-    url_pre2 = 'https://sci-hub.'
-    for first_letter in LETTERS:
-        for last_letter in LETTERS:
-            url = url_pre + first_letter + last_letter
-            url2 = url_pre2 + first_letter + last_letter
-            url_list.extend([url, url2])
-    return url_list
-
-def basic_func(index, url):
-    try:
-        html = requests.get(url, timeout=6).content
-        soup = BeautifulSoup(html, 'lxml')
-        title = soup.title.contents[0]
-        if title[:7] == "Sci-Hub":
-            print("\n%s%s" %(STD_INFO, url))
-            LINK_FILE.write(url + '\n')
-        else:
-            print("\r%spassing...".ljust(60) %(STD_INFO), end='')
-    except:
-        print("\r%spassing...".ljust(60) %(STD_INFO), end='')
 
 def update_link(mod='c'):
     LINK_FILE = open(get_resource_path('link.txt'), 'w', encoding='utf-8')
     print(STD_INFO + "Updating links ...")
-    PATTERN = r">(htt[^:]+://sci-hub.[^<]+)<"
+    PATTERN = r">(htt[^:]+://sci-hub.[^</]+)<"
     if mod == 'c':
         # method 1: crawl the website.
         # src_url = "https://sci-hub.top/"
@@ -56,7 +33,31 @@ def update_link(mod='c'):
                 LINK_FILE.write(link + '\n')
     elif mod == 'b':
         # method 2: brute force search
-        spider = MSpider(basic_func, get_url_list(), batch_size=18)
+        def get_url_list():
+            url_list = []
+            url_pre = 'http://sci-hub.'
+            url_pre2 = 'https://sci-hub.'
+            for first_letter in LETTERS:
+                for last_letter in LETTERS:
+                    url = url_pre + first_letter + last_letter
+                    url2 = url_pre2 + first_letter + last_letter
+                    url_list.extend([url, url2])
+            return url_list
+
+        def basic_func(index, link):
+            try:
+                html = requests.get(link, timeout=6).content
+                soup = BeautifulSoup(html, 'lxml')
+                title = soup.title.contents[0]
+                if title[:7] == "Sci-Hub":
+                    print('\n' + STD_INFO + "%s" %(link))
+                    LINK_FILE.write(link + '\n')
+                else:
+                    print("\r%spassing...".ljust(60) %(STD_INFO), end='')
+            except:
+                print("\r%spassing...".ljust(60) %(STD_INFO), end='')
+
+        spider = MSpider(basic_func, get_url_list(), batch_size=10)
         spider.crawl()  
     LINK_FILE.close()
 
