@@ -43,7 +43,9 @@ class SciHub(object):
     def find_pdf_in_html(self, html):
         soup = BeautifulSoup(html, 'lxml')
         self.pdf_url = soup.find('iframe', {'id': 'pdf'}).attrs['src'].split('#')[0]
+        self.pdf_url = self.pdf_url if 'http' in self.pdf_url else 'https:' + self.pdf_url
         self.title = ' '.join(self._trim(soup.title.text.split('|')[1]).split('/'))
+        self.title = self.title if self.title else self.pdf_url.split('/')[-1].split('.pdf')[0]
         print(STD_INFO + colored('PDF url', attrs=['bold']) + " -> \n\t%s" %(self.pdf_url))
         print(STD_INFO + colored('Article title', attrs=['bold']) + " -> \n\t%s" %(self.title))
 
@@ -85,11 +87,13 @@ class SciHub(object):
                         os.system('rm captcha_code.jpg')
                 break
 
+        if 'Content-Length' not in res.headers:
+            res = self.sess.get(self.pdf_url, stream=True)
         tot_size = int(res.headers['Content-Length'])
         out_file_path = os.path.join(self.out, self.check_title(self.title) + '.pdf')
         downl_size = 0
         with open(out_file_path, 'wb') as f:
-            for data in res.iter_content(chunk_size=512, decode_unicode=False):
+            for data in res.iter_content(chunk_size=1024, decode_unicode=False):
                 f.write(data)
                 downl_size += len(data)
                 perc = int(downl_size/tot_size*100)
@@ -123,7 +127,7 @@ class SciHub(object):
                 scihub_url_index += 1
             else:
                 break
-
+        
         try:
             self.find_pdf_in_html(content)
             self.download_pdf()
@@ -144,6 +148,16 @@ class SciHub(object):
 
 
 if __name__=="__main__":
-    a = SciHub('https://doi.org/10.5539/cis.v4n4p72', 'paper')
-    # a = SciHub('https://doi.org/10.1101/cshperspect.a023812', 'paper')
-    a.download()
+    test_dois = [
+        'https://doi.org/10.1097/00010694-198309000-00012',
+        # 'https://doi.org/10.1097/00010694-193910000-00022',
+        # 'https://doi.org/10.1097/00010694-197704000-00011',
+        # 'https://doi.org/10.1016/b978-0-444-81490-6.50054-6',
+        # 'https://doi.org/10.1097/00010694-198008000-00014',
+        # 'https://doi.org/10.1097/00010694-197704000-00011',
+        # 'https://doi.org/10.1097/00010694-196111000-00035',
+        # 'https://doi.org/10.1097/00010694-197301000-00016',
+        # 'https://doi.org/10.1097/00010694-198904000-00014',
+    ]
+    for doi in test_dois:
+        SciHub(doi, 'paper').download()
