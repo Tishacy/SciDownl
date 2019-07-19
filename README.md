@@ -5,6 +5,8 @@ Download pdfs from Scihub via DOI.
 - Easy to deal with captcha.
 - Easy to update Scihub newest domains.
 
+<img src="./demo.svg">
+
 ## Install
 ```bash
 pip3 install scidownl
@@ -91,6 +93,9 @@ update_link(mod='b')
 - v0.2.2:
   - Add new source website.
   - Add `-l/--list` argument in command line tool.
+- v0.2.3:
+    - Fix bugs of empty filename and wrong scidhub urls.
+    - Fix bugs in the brute-force method of updating scihub urls.
 
 ## LICENSE
 
