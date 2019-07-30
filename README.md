@@ -96,6 +96,9 @@ update_link(mod='b')
 - v0.2.3:
     - Fix bugs of empty filename and wrong scidhub urls.
     - Fix bugs in the brute-force method of updating scihub urls.
+- V0.2.4:
+    - Fix #2.
+    - Fix bugs of error: file name too long.
 
 ## LICENSE
 
