@@ -44,7 +44,7 @@ class SciHub(object):
         soup = BeautifulSoup(html, 'lxml')
         self.pdf_url = soup.find('iframe', {'id': 'pdf'}).attrs['src'].split('#')[0]
         self.pdf_url = self.pdf_url.replace('https', 'http') if 'http' in self.pdf_url else 'http:' + self.pdf_url
-        self.title = ' '.join(self._trim(soup.title.text.split('|')[1]).split('/'))
+        self.title = ' '.join(self._trim(soup.title.text.split('|')[1]).split('/')).split('.')[0]
         self.title = self.title if self.title else self.pdf_url.split('/')[-1].split('.pdf')[0]
         print(STD_INFO + colored('PDF url', attrs=['bold']) + " -> \n\t%s" %(self.pdf_url))
         print(STD_INFO + colored('Article title', attrs=['bold']) + " -> \n\t%s" %(self.title))
