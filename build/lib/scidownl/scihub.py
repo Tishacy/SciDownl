@@ -43,8 +43,8 @@ class SciHub(object):
     def find_pdf_in_html(self, html):
         soup = BeautifulSoup(html, 'lxml')
         self.pdf_url = soup.find('iframe', {'id': 'pdf'}).attrs['src'].split('#')[0]
-        self.pdf_url = self.pdf_url if 'http' in self.pdf_url else 'https:' + self.pdf_url
-        self.title = ' '.join(self._trim(soup.title.text.split('|')[1]).split('/'))
+        self.pdf_url = self.pdf_url.replace('https', 'http') if 'http' in self.pdf_url else 'http:' + self.pdf_url
+        self.title = ' '.join(self._trim(soup.title.text.split('|')[1]).split('/')).split('.')[0]
         self.title = self.title if self.title else self.pdf_url.split('/')[-1].split('.pdf')[0]
         print(STD_INFO + colored('PDF url', attrs=['bold']) + " -> \n\t%s" %(self.pdf_url))
         print(STD_INFO + colored('Article title', attrs=['bold']) + " -> \n\t%s" %(self.title))
@@ -149,7 +149,7 @@ class SciHub(object):
 
 if __name__=="__main__":
     test_dois = [
-        'https://doi.org/10.1097/00010694-198309000-00012',
+        '10.1021/ol9910114',
         # 'https://doi.org/10.1097/00010694-193910000-00022',
         # 'https://doi.org/10.1097/00010694-197704000-00011',
         # 'https://doi.org/10.1016/b978-0-444-81490-6.50054-6',
