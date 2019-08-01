@@ -87,7 +87,7 @@ class SciHub(object):
                         os.system('rm captcha_code.jpg')
                 break
 
-        if 'Content-Length' not in res.headers:
+        while 'Content-Length' not in res.headers:
             res = self.sess.get(self.pdf_url, stream=True)
         tot_size = int(res.headers['Content-Length'])
         out_file_path = os.path.join(self.out, self.check_title(self.title) + '.pdf')
