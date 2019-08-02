@@ -10,11 +10,11 @@ def main():
     """
     parser = argparse.ArgumentParser("Command line tool to download pdf via DOI from Scihub.")
     # parser.add_argument('DOI', help="the DOI number of the paper")
+    parser.add_argument('-c', '--choose', help="choose scihub url by index")
     parser.add_argument('-D', '--DOI', help="the DOI number of the paper")
     parser.add_argument('-o', '--output', help="directory to download the pdf")
     parser.add_argument('-u', '--update', action='store_true', help="update available Scihub links")
-    parser.add_argument('-l', '--list', action='store_true', help="list current saved sichub urls.")
-    parser.add_argument('-c', '--choose', help="choose scihub url by index.")
+    parser.add_argument('-l', '--list', action='store_true', help="list current saved sichub urls")
     args = parser.parse_args()
 
     if args.DOI:
@@ -39,6 +39,8 @@ def main():
                     print('  [{0}] {1}'.format(i, link[:-1]))
     elif args.choose:
         open(get_resource_path('cur_scihub_index.txt'), 'w').write(args.choose)
+        cur_scihub_url = open(get_resource_path('link.txt'), 'r').readlines()[int(args.choose)].replace('\n', '')
+        print("Current scihub url: %s" %(cur_scihub_url))
     else:
         print("Command line tool to download pdfs via DOI from Scihub.")
 

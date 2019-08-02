@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="scidownl",
-    version="0.2.4",
+    version="0.2.5",
     author="Tishacy",
     author_email="Tishacy@gmail.com",
     description="Download pdfs from Scihub via DOI.",

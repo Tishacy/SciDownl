@@ -3,6 +3,7 @@ README.md
 setup.cfg
 setup.py
 scidownl/__init__.py
+scidownl/cur_scihub_index.txt
 scidownl/link.txt
 scidownl/scidownl.py
 scidownl/scihub.py
