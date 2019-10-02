@@ -119,6 +119,8 @@ update_link(mod='b')
   - Reconstruct code.
   - Fix 'no content-length' error.
   - Add `-c/--choose` argument for manually choosing scihub url used.
+- V0.2.6:
+  - Fix bug where retry time too long.
 
 ## LICENSE
 

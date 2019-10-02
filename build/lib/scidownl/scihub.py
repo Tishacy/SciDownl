@@ -66,7 +66,7 @@ class SciHub(object):
 
                 self.use_scihub_url(scihub_url_index)
                 scihub_paper_url = '%s/%s' %(self.scihub_url, str(self.doi))
-                res = self.sess.get(scihub_paper_url, steam=True)
+                res = self.sess.get(scihub_paper_url, stream=True)
                 if res.text in ['\n', ''] or res.status_code in [429, 404]:
                     print(STD_ERROR + "Current Scihub link is invalid, changing another link...")
                     scihub_url_index += 1
@@ -158,19 +158,24 @@ class SciHub(object):
                         os.system('rm captcha_code.jpg')
                 break
 
-        while 'Content-Length' not in res.headers:
+        retry_times = 0
+        while 'Content-Length' not in res.headers and retry_times < 10:
             print('\r' + STD_INFO + "Retrying...", end="")
             res.close()
             res = self.sess.get(pdf['pdf_url'], stream=True)
-        tot_size = int(res.headers['Content-Length'])
+            retry_times += 1
+        tot_size = int(res.headers['Content-Length']) if 'Content-Length' in res.headers else 0
         out_file_path = os.path.join(self.out, pdf['title']+'.pdf')
         downl_size = 0
         with open(out_file_path, 'wb') as f:
             for data in res.iter_content(chunk_size=1024, decode_unicode=False):
                 f.write(data)
                 downl_size += len(data)
-                perc = int(downl_size/tot_size*100)
-                perc_disp = colored('[%3d%%] ' %(perc), 'green')
+                if tot_size != 0:
+                    perc = int(downl_size/tot_size*100)
+                    perc_disp = colored('[%3d%%] ' %(perc), 'green')
+                else:
+                    perc_disp = colored(STD_INFO)
                 print("\r{0}Progress: {1} / {2}".format(perc_disp, downl_size, tot_size), end='')
         print('\n' + STD_INFO + "Done.".ljust(50))
 
