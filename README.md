@@ -82,7 +82,7 @@ Dowloading a list of DOIS by simply using a for loop.
 ```python
 from scidownl.scihub import *
 
-DOIs = [...]
+DOIS = [...]
 out = 'paper'
 for doi in DOIS:
   SciHub(doi, out).download(choose_scihub_url_index=3)
