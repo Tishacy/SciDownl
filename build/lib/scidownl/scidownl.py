@@ -14,6 +14,7 @@ def main():
     parser.add_argument('-D', '--DOI', help="the DOI number of the paper")
     parser.add_argument('-o', '--output', help="directory to download the pdf")
     parser.add_argument('-u', '--update', action='store_true', help="update available Scihub links")
+    parser.add_argument('-b', '--brute-update', action='store_true', help="update available Scihub links by brute-force search")
     parser.add_argument('-l', '--list', action='store_true', help="list current saved sichub urls")
     args = parser.parse_args()
 
@@ -26,6 +27,8 @@ def main():
         sci.download(choose_scihub_url_index=SCIHUB_URL_INDEX)
     elif args.update:
         update_link()
+    elif args.brute_update:
+        update_link('b')
     elif args.list:
         link_file_path = get_resource_path('link.txt')
         cur_scihub_index = int(open(get_resource_path('cur_scihub_index.txt'), 'r').read())

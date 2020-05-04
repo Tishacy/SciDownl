@@ -84,7 +84,7 @@ from scidownl.scihub import *
 
 DOIs = [...]
 out = 'paper'
-for doi in DOIS:
+for doi in DOIs:
   SciHub(doi, out).download(choose_scihub_url_index=3)
 ```
 
@@ -121,6 +121,8 @@ update_link(mod='b')
   - Add `-c/--choose` argument for manually choosing scihub url used.
 - V0.2.6:
   - Fix bug where retry time too long.
+- V0.2.7:
+  - Add `-b/--brute-update` argument for updating scihub urls by brute-force search method.
 
 ## LICENSE
 

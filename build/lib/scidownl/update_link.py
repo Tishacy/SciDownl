@@ -23,8 +23,8 @@ def update_link(mod='c'):
     if mod == 'c':
         # method 1: crawl the website.
         # src_url = "https://sci-hub.top/"
-        src_url = "https://lovescihub.wordpress.com/"
-        # src_url = "http://tool.yovisun.com/scihub/"
+        # src_url = "https://lovescihub.wordpress.com/"
+        src_url = "http://tool.yovisun.com/scihub/"
         html = requests.get(src_url).text
         available_links = re.findall(PATTERN, html)
         for link in available_links:
@@ -50,7 +50,7 @@ def update_link(mod='c'):
                 soup = BeautifulSoup(html, 'lxml')
                 title = soup.title.contents[0]
                 if title[:7] == "Sci-Hub":
-                    print('\n' + STD_INFO + "%s" %(link))
+                    print('\r' + STD_INFO + "Found %s".ljust(50) %(link))
                     LINK_FILE.write(link + '\n')
                 else:
                     print("\r%spassing...".ljust(60) %(STD_INFO), end='')
