@@ -58,7 +58,8 @@ def update_link(mod='c'):
                     soup = BeautifulSoup(html, 'lxml')
                     title = soup.title.contents[0]
                     if title[:7] == "Sci-Hub":
-                        print(STD_INFO + "Found %s".ljust(70) %(self.link))
+                        msg = "\r" + STD_INFO + "Found %s" %(self.link)
+                        print(msg.ljust(os.get_terminal_size().columns, " "))
                         LINK_FILE.write(self.link + '\n')
                 except Exception as e:
                     # print("\r%spassing...".ljust(60) %(STD_INFO), end='')

@@ -5,9 +5,11 @@ import requests, os, sys, re
 from bs4 import BeautifulSoup
 from PIL import Image
 from termcolor import colored
+from colorama import init
 
 from .update_link import update_link, get_resource_path
 
+init()
 
 STD_INFO = colored('[INFO] ', 'green')
 STD_ERROR = colored('[ERROR] ', 'red')

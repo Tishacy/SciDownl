@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="scidownl",
-    version="0.2.7",
+    version="0.2.8",
     author="Tishacy",
     author_email="Tishacy@gmail.com",
     description="Download pdfs from Scihub via DOI.",
@@ -14,7 +14,7 @@ setuptools.setup(
     url="https://github.com/Tishacy/SciDownl",
     packages=setuptools.find_packages(),
     include_package_data=True,
-    install_requires=['termcolor>=1.1.0','mspider>=0.2.5',
+    install_requires=['termcolor>=1.1.0','qspider>=0.1.2',
                       'requests>=2.18.4','Pillow>=6.0.0', 'beautifulsoup4>=4.7.1'],
     entry_points={
         'console_scripts': [

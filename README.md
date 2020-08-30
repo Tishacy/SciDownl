@@ -123,6 +123,8 @@ update_link(mod='b')
   - Fix bug where retry time too long.
 - V0.2.7:
   - Add `-b/--brute-update` argument for updating scihub urls by brute-force search method.
+- V0.2.8:
+  - Replace the mspider with qspider in brute-force search.
 
 ## LICENSE
 

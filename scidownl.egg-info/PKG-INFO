@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: scidownl
-Version: 0.2.7
+Version: 0.2.8
 Summary: Download pdfs from Scihub via DOI.
 Home-page: https://github.com/Tishacy/SciDownl
 Author: Tishacy
@@ -131,6 +131,8 @@ Description: # SciDownl
           - Fix bug where retry time too long.
         - V0.2.7:
           - Add `-b/--brute-update` argument for updating scihub urls by brute-force search method.
+        - V0.2.8:
+          - Replace the mspider with qspider in brute-force search.
         
         ## LICENSE
         
