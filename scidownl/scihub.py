@@ -111,7 +111,7 @@ class SciHub(object):
         pdf = {}
         soup = BeautifulSoup(html, 'html.parser')
         
-        pdf_url = soup.find('iframe', {'id': 'pdf'}).attrs['src'].split('#')[0]
+        pdf_url = soup.find('embed', {'id': 'pdf'}).attrs['src'].split('#')[0]
         pdf['pdf_url'] = pdf_url.replace('https', 'http') if 'http' in pdf_url else 'http:' + pdf_url
         
         title = ' '.join(self._trim(soup.title.text.split('|')[1]).split('/')).split('.')[0]
