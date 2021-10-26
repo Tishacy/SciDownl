@@ -17,9 +17,10 @@ STD_WARNING = colored('[WARNING] ', 'yellow')
 STD_INPUT = colored('[INPUT] ', 'blue')
 
 class SciHub(object):
-    def __init__(self, doi, out='.'):
+    def __init__(self, doi, out='.', title=None):
         self.doi = doi
         self.out = out
+        self.title = title
         self.sess = requests.Session()
         self.check_out_path()
         self.read_available_links()
@@ -107,16 +108,15 @@ class SciHub(object):
                 'pdf_url': (str) real url of the pdf.
                 'title': (str) title of the article.
             }
-        """
+        """        
         pdf = {}
-        soup = BeautifulSoup(html, 'html.parser')
-        
-        pdf_url = soup.find('iframe', {'id': 'pdf'}).attrs['src'].split('#')[0]
+        soup = BeautifulSoup(html, 'html.parser') 
+        pdf_url = soup.find('embed', {'id': 'pdf'}).attrs['src'].split('#')[0]
         pdf['pdf_url'] = pdf_url.replace('https', 'http') if 'http' in pdf_url else 'http:' + pdf_url
-        
-        title = ' '.join(self._trim(soup.title.text.split('|')[1]).split('/')).split('.')[0]
-        title = title if title else pdf['pdf_url'].split('/')[-1].split('.pdf')[0]
-        pdf['title'] = self.check_title(title)
+        #title = ' '.join(self._trim(soup.title.text.split('|')[1]).split('/')).split('.')[0]
+        #title = title if title else pdf['pdf_url'].split('/')[-1].split('.pdf')[0]
+        self.title = self.title if self.title else pdf['pdf_url'].split('/')[-1].split('.pdf')[0]
+        pdf['title'] = self.check_title(self.title)
         print(STD_INFO + colored('PDF url', attrs=['bold']) + " -> \n\t%s" %(pdf['pdf_url']))
         print(STD_INFO + colored('Article title', attrs=['bold']) + " -> \n\t%s" %(pdf['title']))
         return pdf
