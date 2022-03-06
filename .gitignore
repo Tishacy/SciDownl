@@ -1,15 +1,27 @@
+# IDE
 .idea
 .vscode
+
+# code cache
 __pycache__
+*.pyc
+
+# build and packate
 build
 dist
 *.egg-info/
 
+# data
+data
+*.db
+paper
+
+# OS
 .DS_Store
+
+# logs
 *.log
-*config.json
-*.service
-*.sh
-*.pyc
+
+# Others
 DEPLOYMENT.md
 playground.*

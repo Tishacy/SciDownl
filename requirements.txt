@@ -1,5 +1,9 @@
-termcolor>=1.1.0
-qspider>=0.1.2
-requests>=2.18.4
-Pillow>=6.0.0
-beautifulsoup4>=4.7.1
+beautifulsoup4>=4.10.0
+click>=8.0.4
+loguru>=0.6.0
+requests>=2.27.1
+setuptools>=58.0.4
+SQLAlchemy>=1.4.31
+tablib>=3.2.0
+tablib[cli]
+wget>=3.2

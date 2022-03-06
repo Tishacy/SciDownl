@@ -1,1 +1,1 @@
-recursive-include scidownl *.txt
+recursive-include scidownl/config *.ini
