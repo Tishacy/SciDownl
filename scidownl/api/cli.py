@@ -85,7 +85,7 @@ def list_domains():
               help="PMID numbers. Specifying multiple PMIDs is supported, "
                    "e.g., --pmid FIRST_PMID --pmid SECOND_PMID ...")
 @click.option("-o", "--out",
-              help="Output directory or file path, which could be a absolute path "
+              help="Output directory or file path, which could be an absolute path "
                    "or a relative path. "
                    "Output directory examples: /absolute/path/to/download/, ./relative/path/to/download/, "
                    "Output file examples: /absolute/dir/paper.pdf, ../relative/dir/paper.pdf. "
