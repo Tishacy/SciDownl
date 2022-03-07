@@ -232,4 +232,4 @@ More examples could be seen in [examples](./example/simple.py).
 
 Copyright (c) 2022 tishacy.
 
-Licensed under the [MIT License](https://github.com/Tishacy/SciDownl/blob/1.0/LICENSE).
+Licensed under the [MIT License](https://github.com/Tishacy/SciDownl/blob/v1.0/LICENSE).
