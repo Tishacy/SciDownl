@@ -2,8 +2,9 @@
 
 An unofficial api for downloading papers from SciHub.
 
--   Support downloading with DOI or PMID.
--   Easy to update newst SciHub domains.
+- Support downloading with DOI or PMID.
+- Easy to update newest SciHub domains.
+- Support proxies.
 
 # Quick Usage
 
@@ -13,6 +14,9 @@ $ scidownl download --doi https://doi.org/10.1145/3375633
 
 # Download with a PMID and a user-defined filepath
 $ scidownl download --pmid 31395057 --out ./paper/paper-1.pdf
+
+# Download with a proxy: SCHEME=PROXY_ADDRESS 
+$ scidownl download --pmid 31395057 --out ./paper/paper-1.pdf --proxy http=socks5://127.0.0.1:7890
 ```
 
 # Installation
@@ -223,7 +227,10 @@ from scidownl import scihub_download
 paper = "https://doi.org/10.1145/3375633"
 paper_type = "doi"
 out = "./paper/one_paper.pdf"
-scihub_download(paper, paper_type=paper_type, out=out)
+proxies = {
+    'http': 'socks5://127.0.0.1:7890'
+}
+scihub_download(paper, paper_type=paper_type, out=out, proxies=proxies)
 ```
 
 More examples could be seen in [examples](./example/simple.py).
