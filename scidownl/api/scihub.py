@@ -8,7 +8,8 @@ def scihub_download(
         keyword: str,
         paper_type: str = 'doi',
         scihub_url: str = None,
-        out: str = None
+        out: str = None,
+        proxies: dict = None
     ) -> None:
     """Download a paper from SciHub.
 
@@ -26,10 +27,12 @@ def scihub_download(
         If None, paper will be downloaded to the current directory with the file
         name of the paper's title.
     """
+    proxies = proxies or {}
     return ScihubTask(
         source_keyword=keyword,
         source_type=paper_type,
         scihub_url=scihub_url,
-        out=out
+        out=out,
+        proxies=proxies
     ).run()
 

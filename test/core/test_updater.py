@@ -22,10 +22,6 @@ class TestDomainUpdater(unittest.TestCase):
         domain_urls = updater.update_domains()
         self.assertTrue(len(domain_urls) != 0)
 
-        updater = CrawlingScihubDomainUpdater("https://sci-hub.top/")
-        domain_urls = updater.update_domains()
-        self.assertTrue(len(domain_urls) != 0)
-
     def test_search_scihub_domain_updater_update_domains(self):
         updater = SearchScihubDomainUpdater()
         domain_urls = updater.update_domains()

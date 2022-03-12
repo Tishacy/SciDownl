@@ -96,8 +96,10 @@ def list_domains():
 @click.option("-u", "--scihub-url",
               help="Scihub domain url. If not specified, automatically choose one from local saved domains. "
                    "It's recommended to leave this option empty.")
+@click.option("-x", "--proxy",
+              help="Proxy with the format of SCHEME=PROXY_ADDRESS. e.g., --proxy http=http://127.0.0.1:7890.")
 @click.help_option("-h", "--help")
-def download(doi, pmid, out, scihub_url):
+def download(doi, pmid, out, scihub_url, proxy: str):
     """Download paper(s) by DOI or PMID."""
     from ..core.task import ScihubTask
     from ..config import get_config
@@ -125,20 +127,37 @@ def download(doi, pmid, out, scihub_url):
         if out is not None and out[-1] != "/":
             out = out + '/'
 
+    proxies = {}
+    # Load proxies configured in global configurations.
+    if configs['proxy'].get('http') is not None:
+        proxies['http'] = configs['proxy'].get('http')
+    if configs['proxy'].get('https') is not None:
+        proxies['https'] = configs['proxy'].get('https')
+
+    # Overwrite the proxy with the user specified proxy.
+    if proxy is not None and "=" in proxy:
+        scheme, proxy_address = proxy.split("=")[:2]
+        proxies[scheme] = proxy_address
+
+    if len(proxies) > 0:
+        logger.info("%15s: %s" % ("Proxies", proxies))
+
     tasks = []
     for doi_item in doi:
         tasks.append({
             'source_keyword': doi_item,
             'source_type': 'doi',
             'scihub_url': scihub_url,
-            'out': out
+            'out': out,
+            'proxies': proxies
         })
     for pmid_item in pmid:
         tasks.append({
             'source_keyword': pmid_item,
             'source_type': 'pmid',
             'scihub_url': scihub_url,
-            'out': out
+            'out': out,
+            'proxies': proxies
         })
     for task_kwargs in tasks:
         task = ScihubTask(**task_kwargs)

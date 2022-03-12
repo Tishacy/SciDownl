@@ -44,6 +44,20 @@ class TestTask(unittest.TestCase):
         ).run()
         shutil.rmtree(tmp_paper_dir)
 
+    def test_run_one_task_with_proxies(self):
+
+        tmp_paper_dir = './.tmp_paper/'
+        ScihubTask(
+            source_keyword="10.1016/bs.apcsb.2019.08.001",
+            source_type="doi",
+            out=tmp_paper_dir,
+            proxies={
+                # 'http': 'http://127.0.0.1:7890'
+                'https': 'socks5://127.0.0.1:7890'
+            }
+        ).run()
+        shutil.rmtree(tmp_paper_dir)
+
 
 if __name__ == '__main__':
     unittest.main()
