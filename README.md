@@ -4,6 +4,7 @@ An unofficial api for downloading papers from SciHub.
 
 - Support downloading with DOI or PMID.
 - Easy to update newest SciHub domains.
+- Ready for changes: Encapsulate possible future changes of SciHub as configurations.
 - Support proxies.
 
 # Quick Usage
