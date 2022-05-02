@@ -1,1 +1,2 @@
 recursive-include scidownl/config *.ini
+include scidownl/db/*.txt
