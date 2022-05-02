@@ -5,7 +5,6 @@ from threading import RLock
 from typing import Optional
 
 from .base import ScihubUrlChooser
-from ..db.entities import ScihubUrl
 from ..db.service import ScihubUrlService
 
 
@@ -21,7 +20,7 @@ class SimpleScihubUrlChooser(ScihubUrlChooser):
         self.cursor = 0
         self._lock = RLock()
 
-    def next(self) -> Optional[ScihubUrl]:
+    def next(self) -> Optional[str]:
         with self._lock:
             if self.cursor < 0 or self.cursor >= len(self.scihub_urls):
                 raise StopIteration
@@ -46,7 +45,7 @@ class RandomScihubUrlChooser(ScihubUrlChooser):
         self.cursor = 0
         self._lock = RLock()
 
-    def next(self) -> Optional[ScihubUrl]:
+    def next(self) -> Optional[str]:
         with self._lock:
             if len(self.temp_zone) == 0:
                 raise StopIteration
@@ -61,41 +60,8 @@ class RandomScihubUrlChooser(ScihubUrlChooser):
         return len(self.temp_zone)
 
 
-class AvailabilityFirstScihubUrlChooser(ScihubUrlChooser):
-    """Availability-first chooser of scihub urls.
-    A scihub url is considered as more available if it has a less failed rate
-        failed_rate = (failed_times) / (success_times + failed_times + 0.01)
-    The tail 0.01 is used to avoid divide by zero error if (success_times + failed_times) == 0.
-    """
-    __chooser_type__ = "availability_first"
-
-    def __init__(self):
-        self.service = ScihubUrlService()
-        self.scihub_urls = self.service.get_all_urls()
-
-        # Sort by availability.
-        self.temp_zone = sorted(
-            self.scihub_urls,
-            key=lambda url: url.failed_times / (url.success_times + url.failed_times + 0.01)
-        )
-
-        self.cursor = 0
-        self._lock = RLock()
-
-    def next(self) -> Optional[ScihubUrl]:
-        with self._lock:
-            if self.cursor < 0 or self.cursor >= len(self.temp_zone):
-                raise StopIteration
-            selected_url = self.temp_zone[self.cursor]
-            self.cursor += 1
-            return selected_url
-
-    def __len__(self):
-        return len(self.temp_zone)
-
-
 scihub_url_choosers = {
     "simple": SimpleScihubUrlChooser,
     "random": RandomScihubUrlChooser,
-    "availability_first": AvailabilityFirstScihubUrlChooser
+    # "availability_first": AvailabilityFirstScihubUrlChooser
 }

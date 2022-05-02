@@ -4,8 +4,6 @@ from abc import ABC, abstractmethod
 from os import PathLike
 from typing import Union, Iterable, List, Optional
 
-from ..db.entities import ScihubUrl
-
 
 class BaseTask(ABC):
     """Abstract task with a `run` method."""
@@ -119,7 +117,7 @@ class ScihubUrlChooser(ABC):
     __chooser_type__ = "base"
 
     @abstractmethod
-    def next(self) -> Optional[ScihubUrl]:
+    def next(self) -> Optional[str]:
         """Returns the next scihub url or None if reach the end."""
         raise NotImplementedError("Implement next method before calling it.")
 
