@@ -7,7 +7,7 @@ from .source import DoiSource, source_classes
 from .crawler import ScihubCrawler
 from .extractor import HtmlPdfExtractor
 from .downloader import UrlDownloader
-from .chooser import AvailabilityFirstScihubUrlChooser, scihub_url_choosers
+from .chooser import SimpleScihubUrlChooser, scihub_url_choosers
 from .updater import CrawlingScihubDomainUpdater
 from ..log import get_logger
 from ..config import get_config
@@ -17,7 +17,7 @@ logger = get_logger()
 configs = get_config()
 
 scihub_url_chooser_type = configs['scihub.task']['scihub_url_chooser_type']
-default_chooser_cls = scihub_url_choosers.get(scihub_url_chooser_type, AvailabilityFirstScihubUrlChooser)
+default_chooser_cls = scihub_url_choosers.get(scihub_url_chooser_type, SimpleScihubUrlChooser)
 
 
 class ScihubTask(BaseTask):
@@ -54,8 +54,8 @@ class ScihubTask(BaseTask):
 
         for i, scihub_url in enumerate(self.scihub_url_chooser):
             try:
-                logger.info(f"Choose scihub url [{i}]: {scihub_url.url}")
-                return self._run(scihub_url.url)
+                logger.info(f"Choose scihub url [{i}]: {scihub_url}")
+                return self._run(scihub_url)
             except Exception as e:
                 logger.warning(f"Error occurs, task status: {self.context['status']}, error: {self.context['error']}")
                 continue

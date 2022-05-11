@@ -11,7 +11,7 @@ from bs4 import BeautifulSoup
 from .base import DomainUpdater
 from ..log import get_logger
 from ..config import get_config
-from ..db.entities import ScihubUrl
+# from ..db.entities import ScihubUrl
 from ..db.service import ScihubUrlService
 
 logger = get_logger()
@@ -29,7 +29,7 @@ class CrawlingScihubDomainUpdater(DomainUpdater):
         self._domain_url_pattern = configs['scihub.domain.updater.crawl']['scihub_url_pattern']
         self._exclude_url_pattern = configs['scihub.domain.updater.crawl']['exclude_url_pattern']
 
-    def update_domains(self) -> Union[List, Iterable[ScihubUrl]]:
+    def update_domains(self) -> Union[List, Iterable[str]]:
         html = requests.get(self.domain_source_url).text
         domain_urls = re.findall(self._domain_url_pattern, html)
 
@@ -40,7 +40,7 @@ class CrawlingScihubDomainUpdater(DomainUpdater):
         logger.info(f"Found {len(available_domain_urls)} valid SciHub domains in total: {available_domain_urls}")
 
         # Save to db.
-        urls_to_save = [ScihubUrl(url=url) for url in available_domain_urls]
+        urls_to_save = [url for url in available_domain_urls]
         self.service.add_urls(urls_to_save)
         logger.info(f"Saved {len(urls_to_save)} SciHub domains to local db.")
         return available_domain_urls
@@ -92,7 +92,7 @@ class SearchScihubDomainUpdater(DomainUpdater):
 
         logger.info(f"Found {len(valid_urls)} valid SciHub domains in total: {valid_urls}")
         # Save to db.
-        urls_to_save = [ScihubUrl(url=url) for url in valid_urls]
+        urls_to_save = [url for url in valid_urls]
         self.service.add_urls(urls_to_save)
         logger.info(f"Saved {len(urls_to_save)} SciHub domains to local db.")
         return valid_urls

@@ -7,7 +7,7 @@ from bs4 import BeautifulSoup
 from .base import BaseExtractor, BaseInformation, BaseTask, BaseTaskStep
 from .content import HtmlContent
 from .information import PdfUrlTitleInformation, UrlInformation
-from .chooser import scihub_url_choosers, AvailabilityFirstScihubUrlChooser
+from .chooser import scihub_url_choosers, SimpleScihubUrlChooser
 from ..exception import PdfTagNotFoundException, PdfUrlNotFoundException, ExtractException
 from ..db.service import ScihubUrlService
 from ..log import get_logger
@@ -19,9 +19,9 @@ configs = get_config()
 
 def get_default_referer():
     scihub_url_chooser_type = configs['scihub.task']['scihub_url_chooser_type']
-    chooser_cls = scihub_url_choosers.get(scihub_url_chooser_type, AvailabilityFirstScihubUrlChooser)
+    chooser_cls = scihub_url_choosers.get(scihub_url_chooser_type, SimpleScihubUrlChooser)
     chooser = chooser_cls()
-    scihub_url = "https://sci-hub.se" if len(chooser) == 0 else chooser.next().url
+    scihub_url = "https://sci-hub.se" if len(chooser) == 0 else chooser.next()
     return scihub_url
 
 

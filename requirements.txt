@@ -4,7 +4,6 @@ loguru>=0.6.0
 requests>=2.27.1
 pysocks
 setuptools>=58.0.4
-SQLAlchemy>=1.4.31
 tablib>=3.2.0
 tablib[cli]
 wget>=3.2
