@@ -86,3 +86,4 @@ class ScihubTask(BaseTask):
         downloader.download(out)
         scihub_url = self.context.get('referer', None)
         self.service.increment_success_times(scihub_url)
+        return out
