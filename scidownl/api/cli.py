@@ -84,6 +84,9 @@ def list_domains():
 @click.option("-p", "--pmid", multiple=True, type=int,
               help="PMID numbers. Specifying multiple PMIDs is supported, "
                    "e.g., --pmid FIRST_PMID --pmid SECOND_PMID ...")
+@click.option("-t", "--title", multiple=True,
+              help="Title string. Specifying multiple titles is supported, "
+                   "e.g., --title FIRST_TITLE --title SECOND_TITLE ...")
 @click.option("-o", "--out",
               help="Output directory or file path, which could be an absolute path "
                    "or a relative path. "
@@ -99,7 +102,7 @@ def list_domains():
 @click.option("-x", "--proxy",
               help="Proxy with the format of SCHEME=PROXY_ADDRESS. e.g., --proxy http=http://127.0.0.1:7890.")
 @click.help_option("-h", "--help")
-def download(doi, pmid, out, scihub_url, proxy: str):
+def download(doi, pmid, title, out, scihub_url, proxy: str):
     """Download paper(s) by DOI or PMID."""
     from ..core.task import ScihubTask
     from ..config import get_config
@@ -111,6 +114,8 @@ def download(doi, pmid, out, scihub_url, proxy: str):
         logger.info("%15s: %s" % ("DOI(s)", list(doi)))
     if len(pmid) > 0:
         logger.info("%15s: %s" % ("PMID(s)", list(pmid)))
+    if len(title) > 0:
+        logger.info("%15s: %s" % ("TITLE(s)", list(title)))
 
     if out is None:
         logger.info("%15s: %s" % ("Output", os.path.abspath('./')))
@@ -123,7 +128,7 @@ def download(doi, pmid, out, scihub_url, proxy: str):
         logger.info("%15s: %s" % ("SciHub Url", scihub_url))
 
     # Always consider out as a directory if there are multiple DOIs and PMIDs.
-    if len(doi) + len(pmid) > 1:
+    if len(doi) + len(pmid) + len(title) > 1:
         if out is not None and out[-1] != "/":
             out = out + '/'
 
@@ -155,6 +160,22 @@ def download(doi, pmid, out, scihub_url, proxy: str):
         tasks.append({
             'source_keyword': pmid_item,
             'source_type': 'pmid',
+            'scihub_url': scihub_url,
+            'out': out,
+            'proxies': proxies
+        })
+    for doi_item in doi:
+        tasks.append({
+            'source_keyword': doi_item,
+            'source_type': 'doi',
+            'scihub_url': scihub_url,
+            'out': out,
+            'proxies': proxies
+        })
+    for title_item in title:
+        tasks.append({
+            'source_keyword': title_item,
+            'source_type': 'title',
             'scihub_url': scihub_url,
             'out': out,
             'proxies': proxies

@@ -2,7 +2,7 @@
 
 An unofficial api for downloading papers from SciHub.
 
-- Support downloading with DOI or PMID.
+- Support downloading with DOI, PMID or TITLE.
 - Easy to update newest SciHub domains.
 - Ready for changes: Encapsulate possible future changes of SciHub as configurations.
 - Support proxies.
@@ -15,6 +15,9 @@ $ scidownl download --doi https://doi.org/10.1145/3375633
 
 # Download with a PMID and a user-defined filepath
 $ scidownl download --pmid 31395057 --out ./paper/paper-1.pdf
+
+# Download with a title
+$ scidownl download --title "ImageNet Classification with Deep Convolutional Neural Networks" --out ./paper/paper-1.pdf
 
 # Download with a proxy: SCHEME=PROXY_ADDRESS 
 $ scidownl download --pmid 31395057 --out ./paper/paper-1.pdf --proxy http=socks5://127.0.0.1:7890
@@ -138,6 +141,9 @@ Options:
                          e.g., --doi FIRST_DOI --doi SECOND_DOI ...
   -p, --pmid INTEGER     PMID numbers. Specifying multiple PMIDs is supported,
                          e.g., --pmid FIRST_PMID --pmid SECOND_PMID ...
+  -t, --title TEXT       Title string. Specifying multiple titles is
+                         supported, e.g., --title FIRST_TITLE --title
+                         SECOND_TITLE ...
   -o, --out TEXT         Output directory or file path, which could be an
                          absolute path or a relative path. Output directory
                          examples: /absolute/path/to/download/,
@@ -155,9 +161,10 @@ Options:
   -h, --help             Show this message and exit.
 ```
 
-#### Download papers with DOI(s) or PMID(s)
+#### Download papers with DOI(s), PMID(s) or TITLE(s)
 
-Using option `-d` or `--doi` to download papers with DOI, and option `-p` or `--pmid` to download papers with PMID. You can specify these options for multiple times, and even mix of them.
+Using option `-d` or `--doi` to download papers with DOI, option `-p` or `--pmid` to download papers with PMID, 
+and option `-t` or `--title` to download papers with titles. You can specify these options for multiple times, and even mix of them.
 
 ```bash
 # with a single DOI
@@ -171,6 +178,12 @@ $ scidownl download --pmid 31395057
 
 # with multiple PMIDs
 $ scidownl download --pmid 31395057 --pmid 24686414
+
+# with a single title
+$ scidownl download --title "ImageNet Classification with Deep Convolutional Neural Networks"
+
+# with multiple titles
+$ scidownl download --title "ImageNet Classification with Deep Convolutional Neural Networks" --title "Aggregated residual transformations for deep neural networks"
 
 # with a mix of DOIs and PMIDs
 $ scidownl download --doi https://doi.org/10.1145/3375633 --pmid 31395057 --pmid 24686414

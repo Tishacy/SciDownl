@@ -23,6 +23,7 @@ def download_multi_papers():
         ("https://doi.org/10.1145/3375633", 'doi', "./paper/"),
         ("31395057", 'pmid', "./paper/"),
         ("24686414", 'pmid', "./paper/"),
+        ("Aggregated Residual Transformations for Deep Neural Networks", 'title', "./paper/"),
     ]
     for paper, paper_type, out in source:
         scihub_download(paper, paper_type=paper_type, out=out)

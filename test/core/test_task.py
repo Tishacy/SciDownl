@@ -20,7 +20,9 @@ class TestTask(unittest.TestCase):
             ("18691502", 'pmid', tmp_paper_dir),
             ("33253586", 'pmid', tmp_paper_dir),
             ('10.1093/oxfordjournals.jmicro.a023417', 'doi', tmp_paper_dir),
-            ('10.1002/chin.197335038', 'doi', tmp_paper_dir)
+            ('10.1002/chin.197335038', 'doi', tmp_paper_dir),
+            ('Measuring and improving customer retention at authorised automobile workshops after free services    ', 'title', tmp_paper_dir),
+            ('Synthetic Biology Goes Cell-Free', 'title', tmp_paper_dir)
         ]
         for case in cases:
             task = ScihubTask(

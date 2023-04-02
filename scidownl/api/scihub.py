@@ -14,7 +14,7 @@ def scihub_download(
     """Download a paper from SciHub.
 
     :param keyword: a DOI or a PMID.
-    :param paper_type: (optional) one of ['doi', 'pmid']
+    :param paper_type: (optional) one of ['doi', 'pmid', 'title']
     :param scihub_url: (optional) a specific SciHub url used to download the paper.
         If None, automatically choose one from local saved domains.
         It's recommended to leave it None.
