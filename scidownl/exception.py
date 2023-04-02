@@ -10,6 +10,10 @@ class EmptyPmidException(Exception):
     """Raised if empty PMID is given."""
 
 
+class EmptyTitleException(Exception):
+    """Raised if empty title is given."""
+
+
 class CrawlException(Exception):
     """Raised if error occurs when crawling."""
 
@@ -28,4 +32,3 @@ class ExtractException(Exception):
 
 class DownloadException(Exception):
     """Raised if error occurs when downloading."""
-

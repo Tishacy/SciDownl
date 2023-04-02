@@ -1,7 +1,7 @@
 import unittest
 
-from scidownl.core.source import DoiSource, PmidSource
-from scidownl.exception import EmptyDoiException, EmptyPmidException
+from scidownl.core.source import DoiSource, PmidSource, TitleSource
+from scidownl.exception import EmptyDoiException, EmptyPmidException, EmptyTitleException
 
 
 class TestSource(unittest.TestCase):
@@ -62,6 +62,32 @@ class TestSource(unittest.TestCase):
 
         pmid_source = PmidSource(cases.get('PMID_number'))
         self.assertEqual(str(cases.get('PMID_number')), pmid_source.get_pmid())
+
+    def test_create_title_source(self):
+        # Empty case: TITLE is None.
+        with self.assertRaises(EmptyTitleException):
+            TitleSource(None)
+
+        # Empty case: doi is an empty string.
+        with self.assertRaises(EmptyTitleException):
+            TitleSource("")
+
+        # Invalid type case: doi is not a string.
+        with self.assertRaises(TypeError):
+            TitleSource(True)
+            TitleSource([])
+            TitleSource({})
+
+        # Correct case.
+        cases = {
+            'title1': 'Visualizing Distributed System Executions',
+            'title2': '    Measuring and improving customer retention at authorised automobile workshops after free services   ',
+        }
+        title_source = TitleSource(cases.get('title1'))
+        self.assertEqual(cases.get('title1'), title_source.get_title())
+
+        title_source = TitleSource(cases.get('title2'))
+        self.assertEqual(str(cases.get('title2')).strip(), title_source.get_title())
 
 
 if __name__ == '__main__':
