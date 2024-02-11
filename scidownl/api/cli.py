@@ -164,14 +164,6 @@ def download(doi, pmid, title, out, scihub_url, proxy: str):
             'out': out,
             'proxies': proxies
         })
-    for doi_item in doi:
-        tasks.append({
-            'source_keyword': doi_item,
-            'source_type': 'doi',
-            'scihub_url': scihub_url,
-            'out': out,
-            'proxies': proxies
-        })
     for title_item in title:
         tasks.append({
             'source_keyword': title_item,
